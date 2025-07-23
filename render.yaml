@@ -1,0 +1,9 @@
+services:
+  - type: web
+    name: student-drug-predictor
+    env: python
+    branch: main
+    buildCommand: ""
+    startCommand: "python app.py"
+    autoDeploy: true
+    pullRequestPreviewsEnabled: true

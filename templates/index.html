@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Student Drug Addiction Prediction</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: #fff;
+            min-height: 100vh;
+        }
+        .card {
+            border-radius: 18px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.12), 0 1.5px 6px rgba(0,0,0,0.08);
+            padding: 32px 18px;
+            width: 100%;
+            max-width: 900px;
+        }
+        @media (max-width: 991.98px) {
+            .card {
+                max-width: 98vw;
+                padding: 18px 4vw;
+            }
+        }
+        @media (max-width: 575.98px) {
+            .card {
+                max-width: 100vw;
+                padding: 10px 2vw;
+            }
+            .form-title {
+                font-size: 1.2rem;
+            }
+            .btn, .btn-primary, .btn-secondary {
+                font-size: 1rem;
+                padding: 10px 0;
+            }
+            .form-label {
+                font-size: 0.98rem;
+            }
+        }
+        .form-title {
+            font-weight: 700;
+            color: #008b9a;
+            margin-bottom: 1.5rem;
+        }
+        .input-group-text {
+            background: #e0f7fa;
+            border: none;
+        }
+        .form-label {
+            font-weight: 500;
+        }
+        .btn-primary {
+            background-color: #00acc1;
+            border: none;
+        }
+        .btn-primary:hover {
+            background-color: #008b9a;
+        }
+        .progress {
+            height: 8px;
+            margin-top: 1rem;
+            display: none;
+        }
+        /* Dark mode styles */
+        body.dark-mode {
+            background: #000000 !important;
+            color: #e0e0e0;
+        }
+        body.dark-mode .card,
+        body.dark-mode .form-card,
+        body.dark-mode .result-card,
+        body.dark-mode .alert,
+        body.dark-mode .accordion,
+        body.dark-mode .accordion-item,
+        body.dark-mode .accordion-body {
+            background: #000000 !important;
+            color: #e0e0e0 !important;
+            box-shadow: none !important;
+        }
+        body.dark-mode .form-label,
+        body.dark-mode .form-title,
+        body.dark-mode .fw-semibold,
+        body.dark-mode h5,
+        body.dark-mode .form-check-label {
+            color: #e0e0e0 !important;
+        }
+        body.dark-mode .form-select,
+        body.dark-mode .form-control {
+            background: #23272b;
+            color: #e0e0e0;
+            border-color: #444;
+        }
+        body.dark-mode .form-select:focus,
+        body.dark-mode .form-control:focus {
+            background: #23272b;
+            color: #fff;
+            border-color: #00acc1;
+        }
+        body.dark-mode .btn,
+        body.dark-mode .btn-primary,
+        body.dark-mode .btn-secondary,
+        body.dark-mode .btn-outline-secondary,
+        body.dark-mode .btn-outline-danger {
+            background: #23272b;
+            color: #e0e0e0;
+            border-color: #444;
+        }
+        body.dark-mode .btn-primary:hover,
+        body.dark-mode .btn-secondary:hover,
+        body.dark-mode .btn-outline-secondary:hover,
+        body.dark-mode .btn-outline-danger:hover {
+            background: #00acc1;
+            color: #fff;
+        }
+        body.dark-mode .alert-info {
+            background: #23272b;
+            color: #e0e0e0;
+            border-color: #444;
+        }
+        body.dark-mode .progress-bar.bg-info {
+            background-color: #00acc1 !important;
+        }
+        body.dark-mode .table,
+        body.dark-mode .table-bordered,
+        body.dark-mode .table-light {
+            background: #23272b;
+            color: #e0e0e0;
+        }
+        body.dark-mode .table-light th {
+            background: #23272b !important;
+            color: #e0e0e0 !important;
+        }
+        body.dark-mode .form-check-input:checked {
+            background-color: #00acc1;
+            border-color: #00acc1;
+        }
+        body.dark-mode .form-check-input {
+            background-color: #444;
+            border-color: #888;
+        }
+        body.dark-mode .text-primary {
+            color: #00acc1 !important;
+        }
+        body.dark-mode .text-muted {
+            color: #b0b0b0 !important;
+        }
+        body.dark-mode .alert-warning {
+            background: #3a2c00;
+            color: #ffe082;
+            border-color: #ffe082;
+        }
+        body.dark-mode .alert-success {
+            background: #1b3a1b;
+            color: #b9f6ca;
+            border-color: #b9f6ca;
+        }
+        body.dark-mode .back-btn {
+            background: #23272b;
+            color: #e0e0e0;
+            border-color: #444;
+        }
+        body.dark-mode .back-btn:hover {
+            background: #00acc1;
+            color: #fff;
+        }
+        body.dark-mode .badge.bg-danger {
+            background-color: #c62828 !important;
+        }
+        body.dark-mode .badge.bg-success {
+            background-color: #388e3c !important;
+        }
+        body.dark-mode .form-check-label {
+            color: #e0e0e0;
+        }
+        /* Responsive image placement */
+        .say-no-img {
+            width: 100%;
+            max-width: 100%;
+            height: auto;
+            object-fit: unset !important;
+        }
+        @media (max-width: 991.98px) {
+            .col-lg-6 .mb-4.w-100.text-center {
+                order: -1;
+            }
+            .say-no-img {
+                max-height: none;
+                border-radius: 0;
+            }
+        }
+        @media (max-width: 575.98px) {
+            .say-no-img {
+                max-height: none;
+                border-radius: 0;
+            }
+        }
+        /* Dark mode image toggle */
+        body.dark-mode .say-no-img-light {
+            display: none !important;
+        }
+        body.dark-mode .say-no-img-dark {
+            display: inline-block !important;
+        }
+        /* HERO section mobile: description on top, image below */
+        @media (max-width: 991.98px) {
+            .hero-desc-col {
+                order: 1;
+            }
+            .hero-img-col {
+                order: 2;
+            }
+        }
+        body {
+            background: #ffffff !important;
+        }
+        .main-bordered-container {
+            background: #ffffff;
+            box-shadow: none;
+        }
+        .card, .form-card, .result-card, .alert, .accordion, .accordion-item, .accordion-body {
+            box-shadow: none !important;
+        }
+        .say-no-img, .say-no-img-light, .say-no-img-dark {
+            box-shadow: none !important;
+        }
+        @media (max-width: 991.98px) {
+            .main-bordered-container {
+                box-shadow: none;
+            }
+        }
+        .edge-to-edge-container {
+            padding-left: 0 !important;
+            padding-right: 0 !important;
+        }
+        .card, .form-card, .result-card, .alert, .accordion, .accordion-item, .accordion-body {
+            border-radius: 0 !important;
+            margin: 0 !important;
+        }
+        h1 {
+            font-size: 60px !important;
+            font-weight: 900 !important;
+        }
+        .form-title, .hero-main-heading, h2 {
+            font-size: 45px !important;
+            font-weight: 600 !important;
+        }
+        h5 {
+            font-size: 35px !important;
+            font-weight: 600 !important;
+        }
+        li {
+            font-size: 20px !important;
+        }
+        .form-label {
+            font-size: 20px !important;
+        }
+        .btn, .btn-primary, .btn-secondary, .btn-outline-secondary, .btn-outline-danger {
+            font-size: 20px !important;
+        }
+        .accordion-button {
+            font-size: 20px !important;
+        }
+        body.dark-mode .accordion-button {
+            color: #000000 !important;
+        }
+        body.dark-mode .accordion-button,
+        body.dark-mode .accordion-item,
+        body.dark-mode .accordion-collapse,
+        body.dark-mode .accordion-body {
+            background: #000 !important;
+            color: #e0e0e0 !important;
+            border-color: #222 !important;
+        }
+        body.dark-mode .accordion-button:not(.collapsed) {
+            background: #000 !important;
+            color: #00acc1 !important;
+            box-shadow: none !important;
+        }
+        body.dark-mode .accordion-button:focus {
+            box-shadow: 0 0 0 0.2rem #00acc1 !important;
+        }
+    </style>
+</head>
+<body>
+    <!-- Accessibility: Skip to content -->
+    <a href="#mainForm" class="visually-hidden-focusable">Skip to main content</a>
+    <!-- Header Section with Dark Mode Toggle -->
+    <header class="text-center mb-4 mt-3 position-relative">
+        <i class="fas fa-user-shield fa-2x text-primary mb-2"></i>
+        <h1 class="fw-bold mb-1">Student Drug Addiction Risk Predictor</h1>
+        <p class="text-muted mb-0">A confidential tool to help assess risk and promote well-being</p>
+        <!-- Dark Mode Toggle -->
+        <div class="position-absolute top-0 end-0 me-3 mt-2" style="z-index:10;">
+            <div class="form-check form-switch">
+                <input class="form-check-input" type="checkbox" id="darkModeToggle" aria-label="Toggle dark mode">
+                <label class="form-check-label" for="darkModeToggle" id="darkModeLabel"><i class="fas fa-moon"></i></label>
+            </div>
+        </div>
+    </header>
+    <div class="container min-vh-100 px-0 edge-to-edge-container" style="max-width: 1440px;">
+        <!-- HERO SECTION -->
+        <div class="row align-items-center justify-content-center mb-4 flex-column-reverse flex-lg-row">
+            <!-- Hero Description -->
+            <div class="col-lg-6 text-center text-lg-start mb-3 mb-lg-0 d-flex flex-column justify-content-center">
+                <h2 class="fw-bold mb-5 hero-main-heading">Empowering Students to Make Healthy Choices </h2>
+                <p class="lead mb-3">This tool helps students confidentially assess their risk for drug addiction and get instant, evidence-based guidance. Take the first step towards a healthier, safer future.</p>
+            </div>
+            <!-- Hero Image -->
+            <div class="col-lg-6 text-center mb-4 mb-lg-0">
+                <!-- Light mode image -->
+                <img src="{{ url_for('static', filename='say_no_to_drugs.png') }}" alt="Say No To Drugs - Student Support" class="img-fluid rounded shadow say-no-img say-no-img-light" style="max-width: 100%; height: auto;">
+                <!-- Dark mode image -->
+                <img src="{{ url_for('static', filename='say_no_to_drugs_dark.png') }}" alt="Say No To Drugs - Student Support (Dark)" class="img-fluid rounded shadow say-no-img say-no-img-dark" style="max-width: 100%; height: auto; display: none;">
+            </div>
+        </div>
+        <!-- FORM SECTION -->
+        <div class="row mb-0 gx-0">
+            <div class="col-12 px-0">
+                <div class="card w-100 m-0 p-3 border-0 rounded-0" style="box-shadow:none; width: 100%; max-width: 100%;">
+                    <!-- Info Alert -->
+                    <div class="alert alert-info alert-dismissible fade show mb-4" role="alert">
+                        <strong>Instructions:</strong> Please answer all questions honestly. Your responses are confidential and not stored.
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                    <h2 class="form-title text-center mb-4">
+                        <i class="fas fa-user-shield me-2"></i>Drug Addiction Risk Assessment
+                    </h2>
+                    <form id="predictForm" method="POST" action="/predict" novalidate tabindex="-1" aria-label="Risk Assessment Form" autocomplete="off">
+                        <span id="mainForm"></span>
+                        <!-- Step Progress Indicator -->
+                        <div class="mb-4">
+                            <div class="d-flex align-items-center mb-2">
+                                <span id="stepLabel" class="fw-semibold">Step 1 of 2</span>
+                                <div class="flex-grow-1 ms-3">
+                                    <div class="progress" style="height: 8px;">
+                                        <div id="stepProgress" class="progress-bar bg-info" style="width: 50%"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="step-1">
+                            {% set feature_explanations = [
+                                'Has the student experimented with drugs or substances?',
+                                'Has there been a noticeable decline in academic performance?',
+                                'Is the student withdrawing from social activities or friends?',
+                                'Are there any financial issues or unexplained spending?',
+                                'Are there physical or mental health problems observed?'
+                            ] %}
+                            {% for feature in features[:5] %}
+                            {% set explanation = feature_explanations[loop.index0] %}
+                            <div class="mb-3">
+                                <label class="form-label" for="{{ feature }}">
+                                    <i class="fas fa-circle-info text-info me-1" data-bs-toggle="tooltip" data-bs-placement="right" title="{{ explanation }}"></i>{{ feature.replace('_', ' ') }}
+                                </label>
+                                <select class="form-select" id="{{ feature }}" name="{{ feature }}">
+                                    <option value="">Select...</option>
+                                    <option value="0">No</option>
+                                    <option value="1">Yes</option>
+                                </select>
+                                <div class="invalid-feedback" style="display:none;">Please select an option.</div>
+                            </div>
+                            {% endfor %}
+                            <button type="button" class="btn btn-primary w-100 mt-2" id="nextBtn" style="width:100%">
+                                Next <i class="fas fa-arrow-right ms-2"></i>
+                            </button>
+                        </div>
+                        <div id="step-2" style="display:none;">
+                            {% set feature_explanations2 = [
+                                'Has the student faced any legal consequences due to behavior?',
+                                'Are there signs of strained relationships with family or friends?',
+                                'Does the student engage in risky behaviors?',
+                                'Are there withdrawal symptoms when not using substances?',
+                                'Does the student deny or resist treatment or help?'
+                            ] %}
+                            {% for feature in features[5:] %}
+                            {% set explanation = feature_explanations2[loop.index0] %}
+                            <div class="mb-3">
+                                <label class="form-label" for="{{ feature }}">
+                                    <i class="fas fa-circle-info text-info me-1" data-bs-toggle="tooltip" data-bs-placement="right" title="{{ explanation }}"></i>{{ feature.replace('_', ' ') }}
+                                </label>
+                                <select class="form-select" id="{{ feature }}" name="{{ feature }}">
+                                    <option value="">Select...</option>
+                    <option value="0">No</option>
+                    <option value="1">Yes</option>
+                </select>
+                                <div class="invalid-feedback" style="display:none;">Please select an option.</div>
+            </div>
+            {% endfor %}
+                            <div class="d-flex justify-content-between">
+                                <button type="button" class="btn btn-secondary mt-2" id="backBtn">
+                                    <i class="fas fa-arrow-left me-2"></i>Back
+                                </button>
+                                <button type="submit" class="btn btn-primary mt-2">
+                                    <i class="fas fa-magnifying-glass-chart me-2"></i>Predict Now
+                                </button>
+                            </div>
+                        </div>
+                        <div class="progress mt-3" id="progressBar">
+                            <div class="progress-bar progress-bar-striped progress-bar-animated bg-info" style="width: 0%"></div>
+                        </div>
+        </form>
+                    <!-- Example/Reset Buttons -->
+                    <div class="d-flex gap-2 justify-content-center mt-4 w-100">
+                        <button class="btn btn-outline-secondary w-100" id="exampleBtn" type="button"><i class="fas fa-magic me-1"></i> Fill Example</button>
+                        <button class="btn btn-outline-danger w-100" id="resetBtn" type="button"><i class="fas fa-eraser me-1"></i> Reset</button>
+                    </div>
+                    <!-- Contact/Support Link -->
+                    <div class="text-center mt-3">
+                        <a href="mailto:support@example.com" class="text-decoration-underline text-primary" style="font-size:0.98rem;">Need help? Contact support</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- DID YOU KNOW SECTION -->
+        <div class="row mb-0 gx-0">
+            <div class="col-12 px-0">
+                <div class="card w-100 m-0 p-3 border-0 rounded-0" style="box-shadow:none;">
+                    <h5 class="fw-semibold mb-2"><i class="fas fa-lightbulb text-warning me-2"></i>Did you know?</h5>
+                    <ul class="mb-0 ps-3">
+                        <li>Early support can reduce the risk of addiction by up to 50%.</li>
+                        <li>Most students who seek help improve their academic and social well-being.</li>
+                        <li>Confidential assessments encourage honest self-reflection and growth.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <!-- TESTIMONIALS SECTION -->
+        <div class="row mb-0 gx-0">
+            <div class="col-12 px-0">
+                <div id="testimonialCarousel" class="carousel slide w-100 m-0 p-3 border-0 rounded-0" data-bs-ride="carousel" style="box-shadow:none; width: 100%; max-width: 100%;">
+                    <div class="carousel-inner">
+                        <div class="carousel-item active">
+                            <div class="card w-100 m-0 p-3 border-0 rounded-0" style="box-shadow:none; width: 100%; max-width: 100%;">
+                                <blockquote class="blockquote mb-0">
+                                    <p>“Talking to someone changed my life for the better.”</p>
+                                    <footer class="blockquote-footer">Anonymous Student</footer>
+                                </blockquote>
+                            </div>
+                        </div>
+                        <div class="carousel-item">
+                            <div class="card w-100 m-0 p-3 border-0 rounded-0" style="box-shadow:none; width: 100%; max-width: 100%;">
+                                <blockquote class="blockquote mb-0">
+                                    <p>“This tool helped me realize I wasn’t alone.”</p>
+                                    <footer class="blockquote-footer">High School Senior</footer>
+                                </blockquote>
+                            </div>
+                        </div>
+                        <div class="carousel-item">
+                            <div class="card w-100 m-0 p-3 border-0 rounded-0" style="box-shadow:none; width: 100%; max-width: 100%;">
+                                <blockquote class="blockquote mb-0">
+                                    <p>“Confidential and easy to use—highly recommend!”</p>
+                                    <footer class="blockquote-footer">College Freshman</footer>
+                                </blockquote>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="carousel-control-prev" type="button" data-bs-target="#testimonialCarousel" data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Previous</span>
+                    </button>
+                    <button class="carousel-control-next" type="button" data-bs-target="#testimonialCarousel" data-bs-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Next</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!-- FEATURES SECTION -->
+        <div class="row mb-0 gx-0">
+            <div class="col-12 px-0">
+                <div class="card w-100 m-0 p-3 border-0 rounded-0" style="box-shadow:none;">
+                    <h5 class="fw-semibold mb-2"><i class="fas fa-check-circle text-success me-2"></i>Why use this tool?</h5>
+                    <ul class="mb-0 ps-3">
+                        <li>100% Confidential & Free</li>
+                        <li>Evidence-based assessment</li>
+                        <li>Instant results & guidance</li>
+                        <li>Mobile-friendly & accessible</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <!-- FAQ SECTION -->
+        <div class="row mb-0 gx-0">
+            <div class="col-12 px-0">
+                <div class="accordion w-100 m-0 p-3 border-0 rounded-0" id="faqAccordion" style="box-shadow:none;">
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="faq1">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faqCollapse1" aria-expanded="false" aria-controls="faqCollapse1">
+                                Is my information safe?
+                            </button>
+                        </h2>
+                        <div id="faqCollapse1" class="accordion-collapse collapse" aria-labelledby="faq1" data-bs-parent="#faqAccordion">
+                            <div class="accordion-body">Yes! Your answers are never stored or shared. This tool is for your personal reflection only.</div>
+                        </div>
+                    </div>
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="faq2">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faqCollapse2" aria-expanded="false" aria-controls="faqCollapse2">
+                                What if I need help?
+                            </button>
+                        </h2>
+                        <div id="faqCollapse2" class="accordion-collapse collapse" aria-labelledby="faq2" data-bs-parent="#faqAccordion">
+                            <div class="accordion-body">Reach out to a counselor, trusted adult, or use the resources provided after your assessment.</div>
+                        </div>
+                    </div>
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="faq3">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faqCollapse3" aria-expanded="false" aria-controls="faqCollapse3">
+                                Can I use this on my phone?
+                            </button>
+                        </h2>
+                        <div id="faqCollapse3" class="accordion-collapse collapse" aria-labelledby="faq3" data-bs-parent="#faqAccordion">
+                            <div class="accordion-body">Absolutely! The tool is fully responsive and works on all devices.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Footer -->
+    <footer class="text-center mt-4 mb-2">
+        <small class="text-muted">
+            <i class="fas fa-lock me-1"></i>
+            Your responses are confidential and not stored. This tool is for educational purposes only and does not replace professional advice.
+        </small>
+    </footer>
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Enable Bootstrap tooltips
+        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+            return new bootstrap.Tooltip(tooltipTriggerEl);
+        });
+        // Multi-step wizard logic
+        const step1 = document.getElementById('step-1');
+        const step2 = document.getElementById('step-2');
+        const nextBtn = document.getElementById('nextBtn');
+        const backBtn = document.getElementById('backBtn');
+        const stepLabel = document.getElementById('stepLabel');
+        const stepProgress = document.getElementById('stepProgress');
+        // Validation for step 1
+        nextBtn.addEventListener('click', function() {
+            let valid = true;
+            step1.querySelectorAll('select').forEach(function(select) {
+                if (select.value === "") {
+                    valid = false;
+                    select.classList.add('is-invalid');
+                    select.nextElementSibling.style.display = 'block';
+                } else {
+                    select.classList.remove('is-invalid');
+                    select.nextElementSibling.style.display = 'none';
+                }
+            });
+            if (valid) {
+                step1.style.display = 'none';
+                step2.style.display = 'block';
+                stepLabel.textContent = 'Step 2 of 2';
+                stepProgress.style.width = '100%';
+            }
+        });
+        // Validation for step 2 and back button
+        backBtn.addEventListener('click', function() {
+            step2.style.display = 'none';
+            step1.style.display = 'block';
+            stepLabel.textContent = 'Step 1 of 2';
+            stepProgress.style.width = '50%';
+        });
+        // Validate all fields on submit
+        document.getElementById("predictForm").addEventListener("submit", function (e) {
+            let valid = true;
+            step2.querySelectorAll('select').forEach(function(select) {
+                if (select.value === "") {
+                    valid = false;
+                    select.classList.add('is-invalid');
+                    select.nextElementSibling.style.display = 'block';
+                } else {
+                    select.classList.remove('is-invalid');
+                    select.nextElementSibling.style.display = 'none';
+                }
+            });
+            if (!valid) {
+                e.preventDefault();
+            }
+            // Progress bar logic
+            var progressBar = document.getElementById("progressBar");
+            var bar = progressBar.querySelector('.progress-bar');
+            progressBar.style.display = "block";
+            bar.style.width = "0%";
+            let width = 0;
+            let interval = setInterval(() => {
+                if (width >= 100) clearInterval(interval);
+                else {
+                    width += 10;
+                    bar.style.width = width + "%";
+                }
+            }, 100);
+        });
+        // Example/Reset Buttons
+        document.getElementById('exampleBtn').addEventListener('click', function() {
+            // Fill all selects with alternating Yes/No for demo
+            let selects = document.querySelectorAll('select.form-select');
+            selects.forEach((select, idx) => {
+                select.value = idx % 2 === 0 ? '1' : '0';
+                select.classList.remove('is-invalid');
+                select.nextElementSibling.style.display = 'none';
+            });
+        });
+        document.getElementById('resetBtn').addEventListener('click', function() {
+            let selects = document.querySelectorAll('select.form-select');
+            selects.forEach((select) => {
+                select.value = '';
+                select.classList.remove('is-invalid');
+                select.nextElementSibling.style.display = 'none';
+            });
+        });
+        // Dark mode toggle logic
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const darkModeLabel = document.getElementById('darkModeLabel');
+        // Load preference
+        if (localStorage.getItem('darkMode') === 'true') {
+            document.body.classList.add('dark-mode');
+            darkModeToggle.checked = true;
+            darkModeLabel.innerHTML = '<i class="fas fa-sun"></i>';
+        }
+        darkModeToggle.addEventListener('change', function() {
+            if (this.checked) {
+                document.body.classList.add('dark-mode');
+                localStorage.setItem('darkMode', 'true');
+                darkModeLabel.innerHTML = '<i class="fas fa-sun"></i>';
+            } else {
+                document.body.classList.remove('dark-mode');
+                localStorage.setItem('darkMode', 'false');
+                darkModeLabel.innerHTML = '<i class="fas fa-moon"></i>';
+            }
+        });
+    </script>
+</body>
+</html>
+

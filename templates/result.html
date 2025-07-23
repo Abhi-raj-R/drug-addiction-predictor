@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Prediction Result</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: #fff;
+            min-height: 100vh;
+        }
+        .result-card {
+            background-color: white;
+            padding: 40px 32px;
+            border-radius: 18px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+            text-align: center;
+            width: 100%;
+            max-width: 900px;
+        }
+        @media (max-width: 991.98px) {
+            .result-card {
+                max-width: 98vw;
+                padding: 18px 4vw;
+            }
+        }
+        @media (max-width: 575.98px) {
+            .result-card {
+                max-width: 100vw;
+                padding: 10px 2vw;
+            }
+            .result-text {
+                font-size: 1.2rem;
+            }
+            .btn, .btn-primary, .btn-secondary, .back-btn {
+                font-size: 1rem;
+                padding: 10px 0;
+            }
+            .fw-semibold, h5 {
+                font-size: 1rem;
+            }
+            .table {
+                font-size: 0.98rem;
+            }
+        }
+        .result-icon {
+            font-size: 56px;
+            margin-bottom: 18px;
+        }
+        div.result-text {
+            font-size: 35px !important;
+            font-weight: 700 !important;
+            color: #333 !important;
+        }
+        .risk-badge {
+            font-size: 28px !important;
+        }
+        .back-btn {
+            margin-top: 28px;
+            background-color: #00acc1;
+            color: white;
+            padding: 12px 32px;
+            border: none;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: 0.3s ease;
+        }
+        .back-btn:hover {
+            background-color: #008b9a;
+        }
+        /* Dark mode styles */
+        body.dark-mode {
+            background: #181a1b !important;
+            color: #e0e0e0;
+        }
+        body.dark-mode .result-card,
+        body.dark-mode .card {
+            background: #23272b !important;
+            color: #e0e0e0;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.5), 0 1.5px 6px rgba(0,0,0,0.18);
+        }
+        body.dark-mode .form-label,
+        body.dark-mode .form-title,
+        body.dark-mode .fw-semibold,
+        body.dark-mode h5,
+        body.dark-mode .form-check-label {
+            color: #e0e0e0 !important;
+        }
+        body.dark-mode .form-select,
+        body.dark-mode .form-control {
+            background: #23272b;
+            color: #e0e0e0;
+            border-color: #444;
+        }
+        body.dark-mode .form-select:focus,
+        body.dark-mode .form-control:focus {
+            background: #23272b;
+            color: #fff;
+            border-color: #00acc1;
+        }
+        body.dark-mode .btn,
+        body.dark-mode .btn-primary,
+        body.dark-mode .btn-secondary,
+        body.dark-mode .btn-outline-secondary,
+        body.dark-mode .btn-outline-danger,
+        body.dark-mode .back-btn {
+            background: #23272b;
+            color: #e0e0e0;
+            border-color: #444;
+        }
+        body.dark-mode .btn-primary:hover,
+        body.dark-mode .btn-secondary:hover,
+        body.dark-mode .btn-outline-secondary:hover,
+        body.dark-mode .btn-outline-danger:hover,
+        body.dark-mode .back-btn:hover {
+            background: #00acc1;
+            color: #fff;
+        }
+        body.dark-mode .alert-info {
+            background: #23272b;
+            color: #e0e0e0;
+            border-color: #444;
+        }
+        body.dark-mode .progress-bar.bg-info {
+            background-color: #00acc1 !important;
+        }
+        body.dark-mode .table,
+        body.dark-mode .table-bordered,
+        body.dark-mode .table-light {
+            background: #23272b;
+            color: #e0e0e0;
+        }
+        body.dark-mode .table-light th {
+            background: #23272b !important;
+            color: #e0e0e0 !important;
+        }
+        body.dark-mode .form-check-input:checked {
+            background-color: #00acc1;
+            border-color: #00acc1;
+        }
+        body.dark-mode .form-check-input {
+            background-color: #444;
+            border-color: #888;
+        }
+        body.dark-mode .text-primary {
+            color: #00acc1 !important;
+        }
+        body.dark-mode .text-muted {
+            color: #b0b0b0 !important;
+        }
+        body.dark-mode .alert-warning {
+            background: #3a2c00;
+            color: #ffe082;
+            border-color: #ffe082;
+        }
+        body.dark-mode .alert-success {
+            background: #1b3a1b;
+            color: #b9f6ca;
+            border-color: #b9f6ca;
+        }
+        body.dark-mode .badge.bg-danger {
+            background-color: #c62828 !important;
+        }
+        body.dark-mode .badge.bg-success {
+            background-color: #388e3c !important;
+        }
+        body.dark-mode .form-check-label {
+            color: #e0e0e0;
+        }
+        body.dark-mode .btn-outline-secondary,
+        body.dark-mode .btn-outline-danger {
+            background: #23272b;
+            color: #e0e0e0;
+            border-color: #00acc1;
+        }
+        body.dark-mode .btn-outline-secondary:hover,
+        body.dark-mode .btn-outline-danger:hover {
+            background: #00acc1;
+            color: #fff;
+            border-color: #00acc1;
+        }
+        body.dark-mode .btn,
+        body.dark-mode .btn-primary,
+        body.dark-mode .btn-secondary,
+        body.dark-mode .back-btn {
+            background: #23272b;
+            color: #e0e0e0;
+            border-color: #00acc1;
+        }
+        body.dark-mode .btn-primary:hover,
+        body.dark-mode .btn-secondary:hover,
+        body.dark-mode .back-btn:hover {
+            background: #00acc1;
+            color: #fff;
+            border-color: #00acc1;
+        }
+        body.dark-mode .text-muted {
+            color: #b0b0b0 !important;
+        }
+        body.dark-mode .table,
+        body.dark-mode .table-bordered,
+        body.dark-mode .table-light {
+            background: #23272b;
+            color: #e0e0e0;
+        }
+        body.dark-mode .table-light th,
+        body.dark-mode .table-light td,
+        body.dark-mode th,
+        body.dark-mode td,
+        body.dark-mode tr {
+            background: #23272b !important;
+            color: #e0e0e0 !important;
+        }
+        body.dark-mode .list-group-item {
+            background: #23272b !important;
+            color: #e0e0e0 !important;
+            border-color: #444 !important;
+        }
+        body.dark-mode .accordion-item,
+        body.dark-mode .accordion-header,
+        body.dark-mode .accordion-button,
+        body.dark-mode .accordion-body {
+            background: #23272b !important;
+            color: #e0e0e0 !important;
+            border-color: #444 !important;
+        }
+        body.dark-mode .accordion-collapse {
+            background: #23272b !important;
+        }
+        body.dark-mode .accordion-button:not(.collapsed) {
+            background: #23272b !important;
+            color: #00acc1 !important;
+            box-shadow: none;
+        }
+        body.dark-mode .accordion-button:focus {
+            box-shadow: 0 0 0 0.2rem #00acc1;
+        }
+        body.dark-mode .form-control,
+        body.dark-mode .form-select {
+            background: #23272b;
+            color: #e0e0e0;
+            border-color: #00acc1;
+        }
+        body.dark-mode .form-control:focus,
+        body.dark-mode .form-select:focus {
+            background: #23272b;
+            color: #fff;
+            border-color: #00acc1;
+        }
+        body.dark-mode .alert-info,
+        body.dark-mode .alert-warning,
+        body.dark-mode .alert-success {
+            background: #23272b;
+            color: #e0e0e0;
+            border-color: #00acc1;
+        }
+        body.dark-mode a,
+        body.dark-mode a:visited {
+            color: #4dd0e1;
+        }
+        body.dark-mode a:hover,
+        body.dark-mode a:focus {
+            color: #00acc1;
+            text-decoration: underline;
+        }
+        body.dark-mode .result-text {
+            color: #fff !important;
+        }
+        h1 {
+            font-size: 60px !important;
+            font-weight: 900 !important;
+        }
+        .form-title, .hero-main-heading, h2 {
+            font-size: 45px !important;
+            font-weight: 600 !important;
+        }
+        h5 {
+            font-size: 35px !important;
+            font-weight: 600 !important;
+        }
+        li {
+            font-size: 20px !important;
+        }
+        .form-label {
+            font-size: 20px !important;
+        }
+        .btn, .btn-primary, .btn-secondary, .btn-outline-secondary, .btn-outline-danger {
+            font-size: 20px !important;
+        }
+        body.dark-mode .accordion-button,
+        body.dark-mode .accordion-item,
+        body.dark-mode .accordion-collapse,
+        body.dark-mode .accordion-body {
+            background: #000 !important;
+            color: #e0e0e0 !important;
+            border-color: #222 !important;
+        }
+        body.dark-mode .accordion-button:not(.collapsed) {
+            background: #000 !important;
+            color: #00acc1 !important;
+            box-shadow: none !important;
+        }
+        body.dark-mode .accordion-button:focus {
+            box-shadow: 0 0 0 0.2rem #00acc1 !important;
+        }
+        body.dark-mode .form-control,
+        body.dark-mode .form-select {
+            background: #23272b;
+            color: #e0e0e0;
+            border-color: #00acc1;
+        }
+        body.dark-mode .form-control:focus,
+        body.dark-mode .form-select:focus {
+            background: #23272b;
+            color: #fff;
+            border-color: #00acc1;
+        }
+        body.dark-mode .alert-info,
+        body.dark-mode .alert-warning,
+        body.dark-mode .alert-success {
+            background: #23272b;
+            color: #e0e0e0;
+            border-color: #00acc1;
+        }
+        body.dark-mode a,
+        body.dark-mode a:visited {
+            color: #4dd0e1;
+        }
+        body.dark-mode a:hover,
+        body.dark-mode a:focus {
+            color: #00acc1;
+            text-decoration: underline;
+        }
+        body.dark-mode .result-text {
+            color: #fff !important;
+        }
+        h1 {
+            font-size: 60px !important;
+            font-weight: 900 !important;
+        }
+        .form-title, .hero-main-heading, h2 {
+            font-size: 45px !important;
+            font-weight: 600 !important;
+        }
+        h5 {
+            font-size: 35px !important;
+            font-weight: 600 !important;
+        }
+        li {
+            font-size: 20px !important;
+        }
+        .form-label {
+            font-size: 20px !important;
+        }
+        .btn, .btn-primary, .btn-secondary, .btn-outline-secondary, .btn-outline-danger {
+            font-size: 20px !important;
+        }
+        body.dark-mode .accordion-button {
+            color: #000000 !important;
+        }
+        body, p, td, th, .result-text, .alert, .list-group-item, .accordion-body, .form-text, .blockquote, .blockquote-footer {
+            font-size: 20px !important;
+        }
+        .card, .form-card, .result-card, .alert, .accordion, .accordion-item, .accordion-body {
+            box-shadow: none !important;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header Section with Dark Mode Toggle -->
+    <header class="text-center mb-4 mt-3 position-relative">
+        <i class="fas fa-user-shield fa-2x text-primary mb-2"></i>
+        <h1 class="fw-bold mb-1" style="font-size:2rem;">Student Drug Addiction Risk Predictor</h1>
+        <p class="text-muted mb-0">A confidential tool to help assess risk and promote well-being</p>
+        <!-- Dark Mode Toggle -->
+        <div class="position-absolute top-0 end-0 me-3 mt-2" style="z-index:10;">
+            <div class="form-check form-switch">
+                <input class="form-check-input" type="checkbox" id="darkModeToggle" aria-label="Toggle dark mode">
+                <label class="form-check-label" for="darkModeToggle" id="darkModeLabel"><i class="fas fa-moon"></i></label>
+            </div>
+        </div>
+    </header>
+    <div class="container min-vh-100 px-0" style="max-width: 1440px;">
+        <div class="result-card w-100 mx-0" style="max-width: 100%;">
+            <!-- Visual Risk Indicator -->
+            <div class="result-icon mb-2">
+                {% if "High" in prediction or "Likely" in prediction %}
+                    <i class="fas fa-exclamation-triangle text-warning"></i>
+                {% else %}
+                    <i class="fas fa-check-circle text-success"></i>
+                {% endif %}
+            </div>
+            <div class="result-text mb-2">{{ prediction }}</div>
+            <!-- Risk Badge -->
+            <span class="badge risk-badge {% if prediction_value == 1 %}bg-danger{% else %}bg-success{% endif %} mb-3">
+                {% if prediction_value == 1 %}High Risk{% else %}Low Risk{% endif %}
+            </span>
+            <!-- Feature Value Summary -->
+            <div class="mt-4 mb-3">
+                <h5 class="fw-semibold mb-2">Your Answers</h5>
+                <div class="table-responsive">
+                    <table class="table table-bordered table-sm align-middle mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Feature</th>
+                                <th>Your Answer</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        {% for feature in features %}
+                            {% set value = values[loop.index0] %}
+                            <tr>
+                                <td>{{ feature.replace('_', ' ') }}</td>
+                                <td>{% if value == 1 or value == '1' %}Yes{% elif value == 0 or value == '0' %}No{% else %}N/A{% endif %}</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <!-- Personalized Advice or Resources -->
+            <div class="mt-4 mb-3">
+                <h5 class="fw-semibold mb-2">Advice & Resources</h5>
+                {% if 'Likely' in prediction %}
+                    <div class="alert alert-warning" role="alert">
+                        It appears there may be a risk of addiction. Consider reaching out to a school counselor, mental health professional, or a trusted adult. <br>
+                        <a href="https://www.samhsa.gov/find-help/national-helpline" target="_blank">SAMHSA National Helpline</a> | <a href="https://www.childhelplineinternational.org/" target="_blank">Child Helpline International</a>
+                    </div>
+                {% else %}
+                    <div class="alert alert-success" role="alert">
+                        No significant risk detected. Continue making healthy choices and seek support if you ever need it. <br>
+                        <a href="https://www.cdc.gov/mentalhealth/learn/index.htm" target="_blank">CDC Mental Health Resources</a>
+                    </div>
+                {% endif %}
+            </div>
+            <!-- Next Steps -->
+            <div class="mt-4 mb-3">
+                <h5 class="fw-semibold mb-2">Next Steps</h5>
+                <ul class="list-group list-group-flush">
+                    {% if 'Likely' in prediction %}
+                        <li class="list-group-item">Talk to a counselor or trusted adult about your results.</li>
+                        <li class="list-group-item">Consider a professional assessment for further guidance.</li>
+                        <li class="list-group-item">Stay connected with supportive friends and family.</li>
+                    {% else %}
+                        <li class="list-group-item">Keep monitoring your well-being and check in regularly.</li>
+                        <li class="list-group-item">Support friends who may be struggling.</li>
+                    {% endif %}
+                    <li class="list-group-item">Retake this assessment in a few months or if your situation changes.</li>
+                </ul>
+            </div>
+            <!-- Download/Print Option -->
+            <div class="mt-4 mb-3 d-flex gap-2 justify-content-center">
+                <button class="btn btn-outline-primary" onclick="window.print()">
+                    <i class="fas fa-print me-1"></i> Print/Download PDF
+                </button>
+            </div>
+            <!-- Feedback Option -->
+            <div class="mt-4 mb-3">
+                <h5 class="fw-semibold mb-2">Feedback</h5>
+                <form id="feedbackForm" onsubmit="submitFeedback(event)">
+                    <textarea class="form-control mb-2" id="feedbackText" rows="2" placeholder="Share your feedback..."></textarea>
+                    <button type="submit" class="btn btn-secondary btn-sm">Submit Feedback</button>
+                    <div id="feedbackMsg" class="form-text mt-1" style="display:none;">Thank you for your feedback!</div>
+                </form>
+            </div>
+            <!-- Data Privacy Note -->
+            <div class="mt-4 mb-2">
+                <small class="text-muted">
+                    <i class="fas fa-lock me-1"></i>
+                    Your responses are confidential and not stored. This tool is for educational purposes only and does not replace professional advice.
+                </small>
+            </div>
+            <form action="/">
+                <button type="submit" class="back-btn">Try Again</button>
+            </form>
+        </div>
+    </div>
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Feedback form handler
+        function submitFeedback(e) {
+            e.preventDefault();
+            document.getElementById('feedbackText').value = '';
+            document.getElementById('feedbackMsg').style.display = 'block';
+            setTimeout(() => {
+                document.getElementById('feedbackMsg').style.display = 'none';
+            }, 3000);
+        }
+        // Dark mode toggle logic
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const darkModeLabel = document.getElementById('darkModeLabel');
+        // Load preference
+        if (localStorage.getItem('darkMode') === 'true') {
+            document.body.classList.add('dark-mode');
+            darkModeToggle.checked = true;
+            darkModeLabel.innerHTML = '<i class="fas fa-sun"></i>';
+        }
+        darkModeToggle.addEventListener('change', function() {
+            if (this.checked) {
+                document.body.classList.add('dark-mode');
+                localStorage.setItem('darkMode', 'true');
+                darkModeLabel.innerHTML = '<i class="fas fa-sun"></i>';
+            } else {
+                document.body.classList.remove('dark-mode');
+                localStorage.setItem('darkMode', 'false');
+                darkModeLabel.innerHTML = '<i class="fas fa-moon"></i>';
+            }
+        });
+    </script>
+</body>
+</html>

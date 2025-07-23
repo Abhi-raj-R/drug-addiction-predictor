@@ -34,22 +34,6 @@ Student drug addiction is a pressing issue impacting academic performance, healt
 
 ---
 
-## 📂 Folder Structure
-
-```
-├── app.py
-├── static/
-│   ├── style.css
-│   ├── hero_image.png
-├── templates/
-│   ├── index.html
-│   ├── result.html
-├── logistic_addiction_model.pkl
-├── requirements.txt
-└── README.md
-```
-
----
 
 ## ⚙️ Setup Instructions
 

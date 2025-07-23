@@ -3,7 +3,6 @@
 
 A modern, responsive web application that enables students to confidentially assess their risk for drug addiction using machine learning. This app offers a secure, intuitive, and informative interface, encouraging early self-evaluation and access to helpful resources.
 
-![Hero Image](static/hero_image.png)
 
 ---
 
@@ -122,5 +121,5 @@ If you'd like to contribute, fork this repo and submit a pull request with impro
 
 ## 📬 Contact
 
-- 📧 Email: your.email@example.com
-- 🌐 Portfolio: [YourWebsite.com](https://yourwebsite.com)
+- 📧 Email: abhirajr628@gmail.com
+
